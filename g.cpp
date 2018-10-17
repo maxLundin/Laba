@@ -9,8 +9,9 @@
 
 using namespace std;
 
-vector<string> names(1001);
+string name;
 std::map<string, uint32_t> map1;
+std::map<uint32_t, string> map2;
 
 vector<uint32_t> mas[2001];
 vector<uint32_t> mas1[2001];
@@ -48,8 +49,9 @@ int main() {
     cin >> n >> m;
 
     for (int i = 0; i < n; i++) {
-        cin >> names[i];
-        map1.emplace(std::make_pair(names[i], 2 * i));
+        cin >> name;
+        map1.emplace(std::make_pair(name, 2 * i));
+        map2.emplace(std::make_pair(2 * i, name));
     }
 
     for (int i = 0; i < m; i++) {
@@ -63,10 +65,12 @@ int main() {
 
         bool flag2 = (parse[0] == '+');
         uint32_t number2 = map1[parse.substr(1, parse.size())];
-        cout << flag1 << number1 << flag2 << number2 << '\n';
+        //cout << flag1 << number1 << flag2 << number2 << '\n';
 
         mas[number1 + flag1].push_back(number2 + flag2);
+        mas[number2 + !flag2].push_back(number1 + !flag1);
         mas1[number2 + flag2].push_back(number1 + flag1);
+        mas1[number1 + !flag1].push_back(number2 + !flag2);
     }
 
 
@@ -79,17 +83,35 @@ int main() {
     used.assign(2 * n, false);
 
     for (int i = stack.size() - 1; i >= 0; i--) {
-        if (!used[i]) {
+        if (!used[stack[i]]) {
             ++comp;
-            dfs2(i);
+            dfs2(stack[i]);
         }
     }
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i += 2) {
         if (component[i] == component[i + 1]) {
             cout << -1;
             exit(0);
         }
+    }
+
+    vector<string> buf;
+    uint32_t count = 0;
+    for (int i = 0; i < 2 * n; i += 2) {
+        if (component[i] < component[i + 1]) {
+            count++;
+            buf.emplace_back(map2[i]);
+        }
+    }
+
+    if (count == 0) {
+        throw runtime_error("hhh");
+    }
+
+    cout << count << endl;
+    for (int i = 0; i < buf.size(); i++) {
+        cout << buf[i] << '\n';
     }
 
 
