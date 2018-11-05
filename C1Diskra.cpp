@@ -9,84 +9,59 @@ using namespace std;
 
 bool mas[4000][4000];
 
-
-struct Node {
-    Node *b;
-    Node *f;
-    int numb;
-};
-
-Node *finish = new Node();
-Node *start = new Node();
-
 string st;
 
-void dosmth(Node *a, int pos) {
-    cout << "1 " << a->b->numb << " " << pos << std::endl;
-    cin >> st;
-    if (st[0] == 'Y') {
-        Node *no = new Node();
-        no->f = a;
-        no->b = a->b;
-        no->numb = pos;
-        no->b->f = no;
-        no->f->b = no;
-    } else if (a->b->numb == start->numb) {
-        Node *no = new Node();
-        no->numb = pos;
-        no->f = start;
-        no->b = nullptr;
-        start->b = no;
-        start = no;
-    } else {
-        dosmth(a->b, pos);
+int massiv[1001];
+
+void merge(int *a, int size_a, const int *b, int size_b) {
+    int mas[size_a + size_b];
+    int pos = 0;
+    int posa = 0, posb = 0;
+    for (int i = 0; i < size_a + size_b; i++) {
+        cout << 1 << " " << *(a + posa) << " " << *(b + posb) << endl;
+        cin >> st;
+        if (st[0] == 'Y') {
+            mas[pos++] = *(a + posa++);
+        } else {
+            mas[pos++] = *(b + posb++);
+        }
+    }
+    for (int i = 0; i < size_a + size_b; ++i) {
+        *(a + i) = mas[i];
     }
 }
 
+void sort(int *a, int size) {
+    if (size == 1) {
+        return;
+    } else {
+        merge(a, size / 2, a + size / 2, size - size / 2);
+    }
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
 
     int n;
     cin >> n;
-    if (n == 1) {
-        cout << "0 1";
-        exit(0);
+
+    for (int i = 0; i < n; ++i) {
+        massiv[i] = i + 1;
     }
 
-    cout << "1 1 2" << std::endl;
-    cin >> st;
-    finish->b = start;
-    start->f = finish;
-    finish->f = nullptr;
-    start->b = nullptr;
-    if (st[0] == 'Y') {
-        finish->numb = 2;
-        start->numb = 1;
-    } else {
-        finish->numb = 1;
-        start->numb = 2;
-    }
+    //random_shuffle(massiv, massiv + n);
 
-    for (int i = 3; i <= n; i++) {
-        cout << "1 " << finish->numb << " " << i << std::endl;
+    //sort(massiv, n);
+
+    std::stable_sort(massiv, massiv + n, [](int a, int b) {
+        cout << 1 << " " << a << " " << b << endl;
         cin >> st;
-        if (st[0] == 'Y') {
-            Node *a = new Node();
-            a->numb = i;
-            a->b = finish;
-            finish->f = a;
-            a->f = nullptr;
-            finish = a;
-        } else {
-            dosmth(finish, i);
-        }
+        return st[0] == 'Y';
+    });
+    cout << 0 << " ";
+    for (int i = 0; i < n; i++) {
+        cout << massiv[i] << " ";
     }
-    Node *node = start;
-    cout << "0 ";
-    while (node != nullptr) {
-        cout << node->numb << " ";
-        node = node->f;
-    }
+
 }
 

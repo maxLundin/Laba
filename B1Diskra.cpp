@@ -32,17 +32,16 @@ int main() {
         queue.push_back(i);
     }
     label:
-    for (int i = 0; i < 14; i++) {
-        random_shuffle(queue.begin(), queue.end());
-    }
+    random_shuffle(queue.begin(), queue.end());
+
     int i = 0;
     for (int k = 0; k < n * (n - 1); k++) {
         if (!mas[queue[0]][queue[1]]) {
             i = 2;
-            while (i < n && (!mas[queue[0]][queue[i]] || !mas[queue[1]][queue[i + 1]])) {
+            while (i + 1 < n && (!mas[queue[0]][queue[i]] || !mas[queue[1]][queue[i + 1]])) {
                 i++;
             }
-            if (i == n) {
+            if (i + 1 == n) {
                 goto label;
             }
 
