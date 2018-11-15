@@ -31,77 +31,50 @@ int main() {
         mas[b].emplace_back(a, c);
     }
 
-    //cin >> a >> b >> c;
-
-    a = 1;
-//    mas1[a] = 0;
-//    set<int64_t> queue1;
-//    used1[a] = true;
-//    queue1.insert(a);
-//    int v;
-//    while (!queue1.empty()) {
-//        do {
-//            v = (*queue1.begin());
-//            queue1.erase(queue1.begin());
-//        } while (used1[v] && !queue1.empty());
-//
-//        used1[v] = true;
-//        for (int j = 0; j < mas[v].size(); ++j) {
-//            if (mas1[v] + mas[v][j].second < mas1[mas[v][j].first]) {
-//                mas1[mas[v][j].first] = mas1[v] + mas[v][j].second;
-//                queue1.insert(mas[v][j].first);
-//            }
-//        }
-//    }
-
+    cin >> a >> b >> c;
 
     mas1[a] = 0;
-    set<pair<int, int>> queue;
+    set<int> queue;
     used1[a] = true;
     for (auto &i : mas[a]) {
         mas1[i.first] = i.second;
-        queue.insert({mas1[i.first], i.first});
+        queue.insert(i.first);
     }
     int v;
-    while(!queue.empty()) {
+    while (!queue.empty()) {
 
-        do {
-            v = (*queue.begin()).second;
-            queue.erase(queue.begin());
-        } while (used1[v] && !queue.empty());
+        v = (*queue.begin());
+        queue.erase(queue.begin());
+
 
         used1[v] = true;
         for (int j = 0; j < mas[v].size(); ++j) {
             if (mas1[v] + mas[v][j].second < mas1[mas[v][j].first]) {
                 mas1[mas[v][j].first] = mas1[v] + mas[v][j].second;
-                queue.insert({mas1[mas[v][j].first], mas[v][j].first});
+                queue.insert(mas[v][j].first);
             }
         }
     }
 
 
-
-    for (int i = 1 ; i <= n ; i++){
-        cout << mas1[i] << " ";
-    }
-
     mas2[b] = 0;
-    set<int64_t> queue2;
+    set<int> queue2;
     used2[b] = true;
-    queue2.insert(b);
-    int v1;
+    for (auto &i : mas[b]) {
+        mas2[i.first] = i.second;
+        queue2.insert(i.first);
+    }
+    int v2;
     while (!queue2.empty()) {
 
-        do {
-            v1 = (*queue2.begin());
-            queue2.erase(queue2.begin());
-        } while (used2[v1] && !queue2.empty());
+        v2 = (*queue2.begin());
+        queue2.erase(queue2.begin());
 
-        used2[v1] = true;
-        for (int j = 0; j < mas[v1].size(); ++j) {
-            if (mas2[v1] + mas[v1][j].second < mas2[mas[v1][j].first]) {
-                mas2[mas[v1][j].first] = mas2[v1] + mas[v1][j].second;
-                queue2.insert(mas[v1][j].first);
+        used2[v2] = true;
+        for (int j = 0; j < mas[v2].size(); ++j) {
+            if (mas2[v2] + mas[v2][j].second < mas2[mas[v2][j].first]) {
+                mas2[mas[v2][j].first] = mas2[v2] + mas[v2][j].second;
+                queue2.insert(mas[v2][j].first);
             }
         }
     }
@@ -109,6 +82,7 @@ int main() {
     int64_t ab = mas1[b];
     int64_t ac = mas1[c];
     int64_t bc = mas2[c];
+
 
 //    if (mas1[b] != mas2[a]) {
 //        throw runtime_error("wooh");
@@ -118,13 +92,13 @@ int main() {
     //            if (ab+ac <)
     //    }
 
-//    if ((ab == INT64_MAX && (bc == INT64_MAX || ac == INT64_MAX)) || (bc == INT64_MAX && ac == INT64_MAX)) {
-//        cout << -1;
-//        exit(0);
-//    }
-//
-//    cout << min(min(ab + ac, ab + bc), ac + bc)
-//         << std::endl;
+    if ((ab == INT64_MAX && (bc == INT64_MAX || ac == INT64_MAX)) || (bc == INT64_MAX && ac == INT64_MAX)) {
+        cout << -1;
+        exit(0);
+    }
+
+    cout << min(min(ab + ac, ab + bc), ac + bc)
+         << std::endl;
 
 
     //    for (int i = 1; i <= n; ++i) {
